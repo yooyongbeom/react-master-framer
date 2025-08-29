@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { motion, scale } from 'framer-motion';
+import { motion, scale, Variants } from 'framer-motion';
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -11,20 +11,61 @@ const Wrapper = styled.div`
 const Box = styled(motion.div)`
   width: 200px;
   height: 200px;
-  background-color: white;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  background-color: rgba(255, 255, 255, 0.2);
   border-radius: 10px;
   box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
 `;
 
-const myVars = {
-  start: { scale: 0 },
-  end: { scale: 1, rotateZ: 360, strasition: { type: 'spring', delay: 0.1 } },
+const Circle = styled(motion.div)`
+  background-color: white;
+  height: 70px;
+  width: 70px;
+  place-self: center;
+  border-radius: 40px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+`;
+
+const boxVariants: Variants = {
+  start: {
+    opacity: 0,
+    scale: 0.5,
+  },
+  end: {
+    scale: 1,
+    opacity: 1,
+    transition: {
+      type: 'spring',
+      duration: 0.5,
+      bounce: 0.5,
+      delayChildren: 0.5, // 자식들에게 딜레이를 줄수있다.
+      staggerChildren: 0.5, // 자동적으로 자식들에게 0.5씩 + 딜레이 준다.
+    },
+  },
+};
+
+const circleVariants: Variants = {
+  start: {
+    opacity: 0,
+    y: 10,
+  },
+  end: {
+    opacity: 1,
+    y: 0,
+  },
 };
 
 const App = () => {
   return (
     <Wrapper>
-      <Box variants={myVars} initial="start" animate="end" />
+      <Box variants={boxVariants} initial="start" animate="end">
+        {/* 자식들에게 props가 전달된다 그래서 initial, animate를 굳이 적을필요없다 (동일한 이름을 한 이유) */}
+        <Circle variants={circleVariants} />
+        <Circle variants={circleVariants} />
+        <Circle variants={circleVariants} />
+        <Circle variants={circleVariants} />
+      </Box>
     </Wrapper>
   );
 };
